@@ -7,15 +7,17 @@ const web3 = new Web3(window.ethereum);
 function App() {
 
   const [account, setAccount] = useState(undefined);
+  const [data, setData] = useState({
+    updated: false,
+    nonce: undefined,
+    signature: undefined
+  })
 
   const connect = async () => {
     const accounts = await web3.eth.requestAccounts();
-    console.log(accounts);
     setAccount(accounts[0]);
   }
   const getNonce = async (publicAddress) => {
-    console.log(account);
-    console.log(publicAddress);
     const requestOptions = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -24,29 +26,37 @@ function App() {
     const nonce = await fetch('https://up-auth.herokuapp.com/nonce', requestOptions)
       .then(response => response.json())
       .then(data => data["nonce"]);
-    alert(nonce);
-    console.log(nonce);
-    //signNonce(nonce, publicAddress);
+    return nonce;
   }
-  const signNonce = async (nonce, publicAddress) => {
-    web3.eth.personal.sign(`${nonce}`, publicAddress, (err, res) => {
-      if (err) {
-        console.log(err);
-      }
-      else {
-        console.log(res);
-      }
-      /*if (!err) {
-        verifySignature(publicAddress, res);
-      }*/
-    });
+  const signNonce = async (publicAddress, nonce) => {
+    const res = await web3.eth.sign(`${nonce}`, publicAddress);
+    return res.signature;
+  }
+  const sign = async (publicAddress) => {
+    const nonce = await getNonce(publicAddress);
+    const signature = await signNonce(publicAddress, nonce);
+    setData({ updated: true, nonce, signature })
   }
 
   return (
     <div className='btn-container'>
       <button onClick={() => connect()} className='btn connect'>Connect</button>
-      <button onClick={() => getNonce(account)} className='btn sign'>Sign</button>
+      <button onClick={() => sign(account)} className='btn sign'>Sign</button>
       <button className='btn verify'>Verify</button>
+      {
+        account
+        ? <p className='account-data'>Account: {account}</p>
+        : <></>
+      }
+      {
+        data.updated
+        ?
+          <>
+            <p className='account-data'>Nonce: {data.nonce}</p>
+            <p className='account-data'>Signature: {data.signature}</p>
+          </>
+        : <></>
+      }
     </div>
   );
 }
