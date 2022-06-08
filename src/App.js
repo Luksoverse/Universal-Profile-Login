@@ -11,7 +11,8 @@ function App() {
     nonce: undefined,
     signature: undefined
   });
-  
+  const [verificationData, setVerificationData] = useState(undefined);
+
   const connect = async () => {
     const accounts = await web3.eth.requestAccounts();
     setAccount(accounts[0]);
@@ -44,7 +45,7 @@ function App() {
     };
     const res = await fetch('https://up-auth.herokuapp.com/auth', requestOptions)
       .then(response => response.json());
-    console.log(res);
+    setVerificationData({ ...res });
   }
 
   return (
@@ -63,6 +64,15 @@ function App() {
           <>
             <p className='account-data'>Nonce: {data.nonce}</p>
             <p className='account-data'>Signature: {data.signature}</p>
+          </>
+        : <></>
+      }
+      {
+        verificationData !== undefined && verificationData.verified
+        ? 
+          <>
+            <p className='account-data'>Your account is verified, this is indeed you Universal Profile.</p>
+            <p className='account-data'>{verificationData.admin ? 'You are admin.' : 'You are not an admin.'}</p>
           </>
         : <></>
       }
