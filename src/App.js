@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import './App.css';
+import LSP0ERC725Account from '@lukso/lsp-smart-contracts/artifacts/LSP0ERC725Account.json';
 
 import Web3 from 'web3';
 const web3 = new Web3(window.ethereum);
 
 function App() {
+
+  const getAddresses = async () => {
+    const UPContract = new web3.eth.Contract(LSP0ERC725Account.abi, account);
+    console.log(UPContract);
+    const [res] = await UPContract.methods.getData(["0xdf30dba06db6a30e65354d9a64c609861f089545ca58c6b4dbe31a5f338cb0e3"]).call();
+    console.log(res);
+  } 
 
   const [account, setAccount] = useState(undefined);
   const [data, setData] = useState({
@@ -50,7 +58,7 @@ function App() {
   return (
     <div className='btn-container'>
       <button onClick={() => connect()} className='btn connect'>Connect</button>
-      <button onClick={() => sign(account)} className='btn sign'>Sign</button>
+      <button onClick={() => /*sign(account)*/getAddresses()} className='btn sign'>Sign</button>
       <button onClick={() => verifySignature(account, data.signature)} className='btn verify'>Verify</button>
       {
         account
