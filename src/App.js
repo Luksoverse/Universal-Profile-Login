@@ -68,12 +68,14 @@ function App() {
         : <></>
       }
       {
-        verificationData !== undefined && verificationData.verified
-        ? 
-          <>
-            <p className='account-data'>Your account is verified, this is indeed you Universal Profile.</p>
-            <p className='account-data'>{verificationData.admin ? 'You are admin.' : 'You are not an admin.'}</p>
-          </>
+        verificationData !== undefined
+        ? verificationData.verified
+          ?
+            <>
+              <p className='account-data'>Your account is verified, this is indeed you Universal Profile.</p>
+              <p className='account-data'>{verificationData.admin ? 'You are admin.' : 'You are not an admin.'}</p>
+            </>
+          : <p className='account-data'>{verificationData.message}</p>
         : <></>
       }
     </div>
