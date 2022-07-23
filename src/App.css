@@ -1,0 +1,19 @@
+.btn-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.btn {
+  width: 5rem;
+  height: 2rem;
+  margin: .5rem;
+}
+
+.account-data {
+  width: 30rem;
+  word-wrap: break-word;
+  margin: .4rem;
+}
