@@ -23,7 +23,7 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ publicAddress })
     };
-    const nonce = await fetch('https://up-auth.herokuapp.com/nonce', requestOptions)
+    const nonce = await fetch('164.90.201.145', requestOptions)
       .then(response => response.json())
       .then(data => data["nonce"]);
     return nonce;
@@ -43,7 +43,7 @@ function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ publicAddress, signature })
     };
-    const res = await fetch('https://up-auth.herokuapp.com/auth', requestOptions)
+    const res = await fetch('164.90.201.145', requestOptions)
       .then(response => response.json());
     setVerificationData({ ...res });
   }
